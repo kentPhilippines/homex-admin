@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.ower.mapper.HxFormMapper">
+    
+    <resultMap type="HxForm" id="HxFormResult">
+        <result property="id"    column="id"    />
+        <result property="type"    column="type"    />
+        <result property="roomId"    column="room_id"    />
+        <result property="hxUserId"    column="hx_user_id"    />
+        <result property="status"    column="status"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="action"    column="action"    />
+    </resultMap>
+
+    <sql id="selectHxFormVo">
+        select id, type, room_id, hx_user_id, status, update_time, create_time, action from hx_form
+    </sql>
+
+    <select id="selectHxFormList" parameterType="HxForm" resultMap="HxFormResult">
+        <include refid="selectHxFormVo"/>
+        <where>  
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="roomId != null "> and room_id = #{roomId}</if>
+            <if test="hxUserId != null "> and hx_user_id = #{hxUserId}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="action != null "> and action = #{action}</if>
+        </where>
+    </select>
+    
+    <select id="selectHxFormById" parameterType="Long" resultMap="HxFormResult">
+        <include refid="selectHxFormVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertHxForm" parameterType="HxForm" useGeneratedKeys="true" keyProperty="id">
+        insert into hx_form
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="type != null">type,</if>
+            <if test="roomId != null">room_id,</if>
+            <if test="hxUserId != null">hx_user_id,</if>
+            <if test="status != null">status,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="action != null">action,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="type != null">#{type},</if>
+            <if test="roomId != null">#{roomId},</if>
+            <if test="hxUserId != null">#{hxUserId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="action != null">#{action},</if>
+         </trim>
+    </insert>
+
+    <update id="updateHxForm" parameterType="HxForm">
+        update hx_form
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="type != null">type = #{type},</if>
+            <if test="roomId != null">room_id = #{roomId},</if>
+            <if test="hxUserId != null">hx_user_id = #{hxUserId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="action != null">action = #{action},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteHxFormById" parameterType="Long">
+        delete from hx_form where id = #{id}
+    </delete>
+
+    <delete id="deleteHxFormByIds" parameterType="String">
+        delete from hx_form where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

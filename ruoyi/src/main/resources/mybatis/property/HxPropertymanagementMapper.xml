@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.property.mapper.HxPropertymanagementMapper">
+    
+    <resultMap type="HxPropertymanagement" id="HxPropertymanagementResult">
+        <result property="id"    column="id"    />
+        <result property="tower"    column="tower"    />
+        <result property="condoId"    column="condo_id"    />
+        <result property="name"    column="name"    />
+        <result property="phone"    column="phone"    />
+        <result property="type"    column="type"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectHxPropertymanagementVo">
+        select id, tower, condo_id, name, phone, type, create_time, update_time from hx_propertymanagement
+    </sql>
+
+    <select id="selectHxPropertymanagementList" parameterType="HxPropertymanagement" resultMap="HxPropertymanagementResult">
+        <include refid="selectHxPropertymanagementVo"/>
+        <where>  
+            <if test="tower != null  and tower != ''"> and tower = #{tower}</if>
+            <if test="condoId != null "> and condo_id = #{condoId}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="type != null "> and type = #{type}</if>
+        </where>
+    </select>
+    
+    <select id="selectHxPropertymanagementById" parameterType="Long" resultMap="HxPropertymanagementResult">
+        <include refid="selectHxPropertymanagementVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertHxPropertymanagement" parameterType="HxPropertymanagement" useGeneratedKeys="true" keyProperty="id">
+        insert into hx_propertymanagement
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tower != null">tower,</if>
+            <if test="condoId != null">condo_id,</if>
+            <if test="name != null">name,</if>
+            <if test="phone != null">phone,</if>
+            <if test="type != null">type,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tower != null">#{tower},</if>
+            <if test="condoId != null">#{condoId},</if>
+            <if test="name != null">#{name},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="type != null">#{type},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateHxPropertymanagement" parameterType="HxPropertymanagement">
+        update hx_propertymanagement
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="tower != null">tower = #{tower},</if>
+            <if test="condoId != null">condo_id = #{condoId},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteHxPropertymanagementById" parameterType="Long">
+        delete from hx_propertymanagement where id = #{id}
+    </delete>
+
+    <delete id="deleteHxPropertymanagementByIds" parameterType="String">
+        delete from hx_propertymanagement where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

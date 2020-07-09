@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.homex.mapper.HxCondosMapper">
+    
+    <resultMap type="HxCondos" id="HxCondosResult">
+        <result property="id"    column="id"    />
+        <result property="condoName"    column="condo_name"    />
+        <result property="tower"    column="tower"    />
+        <result property="phone"    column="phone"    />
+        <result property="email"    column="email"    />
+        <result property="password"    column="Password"    />
+        <result property="about"    column="about"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectHxCondosVo">
+        select id, condo_name, tower, phone, email, Password, about, create_time, update_time from hx_condos
+    </sql>
+
+    <select id="selectHxCondosList" parameterType="HxCondos" resultMap="HxCondosResult">
+        <include refid="selectHxCondosVo"/>
+        <where>  
+            <if test="condoName != null  and condoName != ''"> and condo_name like concat('%', #{condoName}, '%')</if>
+            <if test="tower != null  and tower != ''"> and tower = #{tower}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="about != null  and about != ''"> and about = #{about}</if>
+        </where>
+    </select>
+    
+    <select id="selectHxCondosById" parameterType="Long" resultMap="HxCondosResult">
+        <include refid="selectHxCondosVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertHxCondos" parameterType="HxCondos" useGeneratedKeys="true" keyProperty="id">
+        insert into hx_condos
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="condoName != null">condo_name,</if>
+            <if test="tower != null">tower,</if>
+            <if test="phone != null">phone,</if>
+            <if test="email != null">email,</if>
+            <if test="password != null">Password,</if>
+            <if test="about != null">about,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="condoName != null">#{condoName},</if>
+            <if test="tower != null">#{tower},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="email != null">#{email},</if>
+            <if test="password != null">#{password},</if>
+            <if test="about != null">#{about},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateHxCondos" parameterType="HxCondos">
+        update hx_condos
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="condoName != null">condo_name = #{condoName},</if>
+            <if test="tower != null">tower = #{tower},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="password != null">Password = #{password},</if>
+            <if test="about != null">about = #{about},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteHxCondosById" parameterType="Long">
+        delete from hx_condos where id = #{id}
+    </delete>
+
+    <delete id="deleteHxCondosByIds" parameterType="String">
+        delete from hx_condos where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
