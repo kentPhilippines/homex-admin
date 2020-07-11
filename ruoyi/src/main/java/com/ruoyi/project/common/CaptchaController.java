@@ -22,18 +22,17 @@ import com.ruoyi.framework.web.domain.AjaxResult;
  * @author ruoyi
  */
 @RestController
-public class CaptchaController
-{
+public class CaptchaController {
     @Autowired
     private RedisCache redisCache;
     @Autowired
     private TokenService tokenService;
+
     /**
      * 生成验证码
      */
     @GetMapping("/captchaImage")
-    public AjaxResult getCode(HttpServletResponse response) throws IOException
-    {
+    public AjaxResult getCode(HttpServletResponse response) throws IOException {
         AjaxResult ajax = AjaxResult.success();
         boolean captchaEnabled = tokenService.isCaptchaEnabled();
         ajax.put("isCaptchaEnabled", captchaEnabled);
@@ -49,20 +48,15 @@ public class CaptchaController
             int w = 111, h = 36;
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             VerifyCodeUtils.outputImage(w, h, stream, verifyCode);
-            try
-            {
+            try {
                 ajax.put("uuid", uuid);
                 ajax.put("img", Base64.encode(stream.toByteArray()));
 
 
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
                 return AjaxResult.error(e.getMessage());
-            }
-            finally
-            {
+            } finally {
                 stream.close();
             }
         }
